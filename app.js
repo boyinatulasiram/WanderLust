@@ -59,7 +59,12 @@ app.get("/listings/:id", async(req,res) =>{
 })
 
 //create route
-
+app.post("/listings", async(req,res)=>{
+    let {title, description, image, price, location, country} = req.body.listing;
+    const newListing = new Listing({title,description,image,price,location,country});
+    await newListing.save();
+    res.redirect("/listings");
+})
 
 app.listen(8080,() =>{
     console.log("Server is running on port 8080");
