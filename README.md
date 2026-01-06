@@ -1,1 +1,1 @@
-# WanderLust
+# WanderLust - Full Stack Travel Platform 
