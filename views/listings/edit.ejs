@@ -4,7 +4,7 @@
   <div class="row mt-3">
     <div class="col-8 offset-2">
       <h1 class="my-4">Edit Listing</h1>
-      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="novalidate">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -12,13 +12,16 @@
             name="listing[title]"
             value="<%= listing.title %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Title should not be Empty</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea name="listing[description]" class="form-control">
+          <textarea name="listing[description]" class="form-control" required>
             <%= listing.description %></textarea
           >
+          <div class="invalid-feedback">Description should not be Empty</div>
         </div>
 
         <div class="mb-3">
@@ -28,7 +31,9 @@
             name="listing[image][url]"
             value="<%= listing.image.url %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Image URL should not be Empty</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
@@ -38,6 +43,8 @@
               name="listing[price]"
               value="<%= listing.price %>"
               class="form-control"
+              required
+              <div class="invalid-feedback">Price should not be Empty</div>
             />
           </div>
           <div class="mb-3 col-md-6">
@@ -47,7 +54,9 @@
               name="listing[country]"
               value="<%= listing.country %>"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Country should not be Empty</div>
           </div>
         </div>
         <div class="mb-3">
@@ -57,7 +66,9 @@
             name="listing[location]"
             value="<%= listing.location %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Location should not be Empty</div>
         </div>
         <button class="btn btn-dark edit-btn mt-3">Edit</button>
         <br />
