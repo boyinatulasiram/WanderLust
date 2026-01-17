@@ -65,7 +65,7 @@ body {
 }
 
 /* cards */
-.card{
+.listing-card{
     border:none !important;
     margin-bottom: 2rem;
 }
@@ -113,8 +113,16 @@ body {
 .show-img{
     height: 30vh;
 }
-.btns{
-    display: flex;
+.btns {
+    margin-top: 1rem;
+}
+
+.edit-btn {
+    background-color: #fe424d !important;
+    border: none;
+}
+.ed-dl-btn{
+    display: flex;;
 }
 
 .show-card{
