@@ -23,7 +23,6 @@ const sessionOptions = {
     saveUninitialized: true,
 }
 
-app.use(session(sessionOptions));
 
 //routes
 const listings = require("./routes/listing.js");
@@ -47,6 +46,14 @@ app.get("/", (req, res) => {
     res.send("I am Root");
 });
 
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+}) 
 
  //listings route
  app.use("/listings",listings);
