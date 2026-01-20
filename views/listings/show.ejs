@@ -12,17 +12,18 @@
       />
       <div class="card-body">
         <p class="card-text">
-           <br />
-          <%= listing.description %> <br />
-          &#8377; <%= listing.price.toLocaleString("en-IN") %> <br />
-          <%= listing.location %> <br />
-          <%= listing.country %>
-        </p>
+          Posted by:
+           <i><%= listing.owner.username %></i>   </p>
+          <p class="card-text"><%= listing.description %>
+          <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %> %> <br />
+          <p class="card-text"><%= listing.location %> <br /></p>
+          <p class="card-text"></p>
+  
+      
       </div>
     </div>
-    <br />
-    </div>
-    <div class="ed-dl-btn offset-3">
+    <% if(currentUser && currentUser._id.equals(listing.owner._id)){ %>
+       <div class="ed-dl-btn offset-3">
        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">Edit</a>
         <form
         method="POST"
@@ -31,6 +32,8 @@
         <button class="btn btn-dark offset-5">Delete</button>
       </form>
     </div>
+   <% } %>
+    
     <div class="col-8 offset-3">
       <hr>
       <h4>Leave a review</h4>
