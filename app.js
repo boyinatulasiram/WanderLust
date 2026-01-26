@@ -23,22 +23,28 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
-const dbUrl = process.env.ATLASDB_URL;
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET
-    },
-    touchAfter:24*60*60,
-});
-store.on("error", ()=>{
-    console.log("ERROR in MONGO SESSION STORE",err);
-});
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wandro";
+console.log("Database URL:", dbUrl);
+// const store = MongoStore.create({
+//     mongoUrl: dbUrl,
+//     crypto: {
+//         secret: process.env.SECRET || "fallbacksecret"
+//     },
+//     touchAfter:24*60*60,
+// });
+// store.on("error", (err)=>{
+//     console.log("ERROR in MONGO SESSION STORE",err);
+// });
 const sessionOptions = {
-    store,
-    secret:process.env.SECRET,
+    // store,
+    secret: process.env.SECRET || "fallbacksecret",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    }
 }
 
 const listingsRouter = require("./routes/listing.js");
@@ -92,7 +98,9 @@ app.use((req, res, next) => {
 //middleware for Handling Errors
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Some error" } = err;
-    //res.status(statusCode).send(message);
+    if (res.headersSent) {
+        return next(err);
+    }
     res.status(statusCode).render("error.ejs", { err });
 });
 
