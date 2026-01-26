@@ -4,7 +4,7 @@
   <div class="row mt-3">
     <div class="col-8 offset-2">
       <h1 class="my-4">Edit Listing</h1>
-      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -23,15 +23,15 @@
           >
           <div class="invalid-feedback">Description should not be Empty</div>
         </div>
-
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
+          <img src="<%= originalImageUrl %>" alt="image" class="show-img">
+        </div>
+         <div class="mb-3">
+          <label for="image" class="form-label">Upload Image</label>
           <input
-            type="text"
-            name="listing[image][url]"
-            value="<%= listing.image.url %>"
+            type="file"
+            name="listing[image]"
             class="form-control"
-            required
           />
           <div class="invalid-feedback">Image URL should not be Empty</div>
         </div>

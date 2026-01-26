@@ -23,7 +23,7 @@
       </div>
     </div>
     <% if(currentUser && currentUser._id.equals(listing.owner._id)){ %>
-       <div class="ed-dl-btn offset-3">
+       <div class="ed-dl-btn offset-3" style="width: 90vh;">
        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">Edit</a>
         <form
         method="POST"
@@ -31,7 +31,7 @@
         >
         <button class="btn btn-dark offset-5">Delete</button>
       </form>
-    </div>
+  </div>
    <% } %>
     
    
@@ -65,8 +65,8 @@
       </form>
       <hr>
        <% } %>
-      <h4>All Reviews</h4>
-      <div class="row">
+      <% if(listing.reviews.length != 0) { %> 
+        <div class="row">
         <% for(review of listing.reviews) { %>
           <div class="card col-5 ms-3 mb-3">
             <div class="card-body">
@@ -82,8 +82,36 @@
           </div>
         <% } %> 
       </div>
+      <% } %>
+       
      
     </div>
-   
+    <div class="col-8 offset-3">
+      <div id="map" class="map">
+    </div>
+    </div>
+
   </div>
+  <!-- <div id="map" class="map mb-3 col-8 offset-"></div> -->
 </body>
+<!-- <link
+  href="https://cdn.maptiler.com/maptiler-sdk-js/v1.2.0/maptiler-sdk.css"
+  rel="stylesheet"
+/> -->
+<script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.2.0/maptiler-sdk.umd.js"></script>
+
+<script>
+  maptilersdk.config.apiKey = "<%= process.env.MAP_TOKEN %>";
+
+  const centerCoords = <%- JSON.stringify(listing.geometry.coordinates) %>;
+
+const map = new maptilersdk.Map({
+  container: "map",
+  style: maptilersdk.MapStyle.STREETS,
+  center: centerCoords,
+  zoom: 10
+});
+
+</script>
+
+

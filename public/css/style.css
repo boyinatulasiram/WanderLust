@@ -9,7 +9,9 @@ body {
 .container{
     flex:1;
 }
-
+.navbar-brand::hover{
+    color: #fe424d;
+}
 .navbar{
     height: 5rem;
     background-color: white;
@@ -128,4 +130,20 @@ body {
 .show-card{
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+/* //map */
+.map {
+  width: 80vh;
+  height: 350px;   /* REQUIRED */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: inline-block;
+  /* mioverflow: visible !important; */
+}
+
+.maplibregl-ctrl-bottom-left{
+    display: none !important;
+}
+.maplibregl-ctrl-bottom-right {
+    display: none;
 }

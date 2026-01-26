@@ -19,12 +19,6 @@ const listingSchema = new Schema({
         },
         url: {
             type: String,
-            default:
-                "https://media.istockphoto.com/id/1453462931/photo/maldives-hotel-beach-resort-on-tropical-island-with-aerial-drone-view.webp",
-            set: v =>
-                v === ""
-                    ? "https://media.istockphoto.com/id/1453462931/photo/maldives-hotel-beach-resort-on-tropical-island-with-aerial-drone-view.webp"
-                    : v
         }
     },
     price: {
@@ -45,6 +39,17 @@ const listingSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User",
     },
+    geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true
+    },
+    coordinates: {
+      type: [Number], // [lng, lat]
+      required: true
+    }
+  },
 });
 listingSchema.post("findOneAndDelete", async (listing) => {
     if (listing) {
