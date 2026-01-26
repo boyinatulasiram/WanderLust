@@ -1,10 +1,6 @@
 if(process.env.NODE_ENV != "production"){
     require("dotenv").config()
 }
-require("dotenv").config();
-console.log("Secret:", process.env.SECRET);
-
-//import { Map, MapStyle, config } from '@maptiler/sdk';
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -14,6 +10,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -26,29 +23,27 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
-
+const dbUrl = process.env.ATLASDB_URL;
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET
+    },
+    touchAfter:24*60*60,
+});
+store.on("error", ()=>{
+    console.log("ERROR in MONGO SESSION STORE",err);
+});
 const sessionOptions = {
-    secret: "mysecretkey",
+    store,
+    secret:process.env.SECRET,
     resave: false,
     saveUninitialized: true,
 }
-//commit
 
-
-
-//  maptilersdk.config.apiKey = "YOUR_MAPTILER_KEY";
-
-//   const map = new maptilersdk.Map({
-//     container: "map",
-//     style: maptilersdk.MapStyle.STREETS,
-//     center: [77.5946, 12.9716], // lng, lat
-//     zoom: 10
-//   });
-//routes
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
     .then(() => {
@@ -58,13 +53,9 @@ main()
     })
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 
-
-app.get("/", (req, res) => {
-    res.send("I am Root");
-});
 
 app.use(session(sessionOptions));
 app.use(flash());

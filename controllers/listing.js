@@ -1,9 +1,6 @@
 const ExpressError = require("../utils/ExpressError.js");
-const { listingSchema } = require("../schema.js");
 const Listing = require("../models/listing.js");
-const isLoggedIn = require("../middleware.js").isLoggedIn;
-const isOwner = require("../middleware.js").isOwner;
-const validateListing = require("../middleware.js").validateListing;
+
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});

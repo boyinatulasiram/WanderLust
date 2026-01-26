@@ -1,4 +1,9 @@
+
 {
+  "engines":{
+    "node": "v18.20.3"
+  },
+  
   "name": "wanderlust",
   "version": "1.0.0",
   "description": "",
