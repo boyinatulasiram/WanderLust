@@ -133,12 +133,29 @@ body {
 }
 /* //map */
 .map {
-  width: 80vh;
+  width: 100%;
+  max-width: 500px;
   height: 350px;   /* REQUIRED */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
   /* mioverflow: visible !important; */
+}
+
+/* Responsive map */
+@media (max-width: 768px) {
+  .map {
+    height: 250px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .map {
+    height: 200px;
+    border-radius: 8px;
+  }
 }
 
 .maplibregl-ctrl-bottom-left{
