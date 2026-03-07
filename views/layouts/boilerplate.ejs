@@ -26,11 +26,11 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="/css/style.css" />
-     <link rel="stylesheet" href="/css/rating.css" />
+    <link rel="stylesheet" href="/css/rating.css" />
   </head>
   <body>
-    <%- include("../includes/navbar.ejs") %>
-    <%- include("../includes/flash.ejs") %>
+    <%- include("../includes/navbar.ejs") %> <%-
+    include("../includes/flash.ejs") %>
     <div class="container"><%- body %></div>
     <%- include("../includes/footer.ejs") %>
 
@@ -40,6 +40,37 @@
       crossorigin="anonymous"
     ></script>
     <script src="/js/script.js"></script>
-   
+    <script>
+      const input = document.getElementById("search-input");
+      const suggestionsBox = document.getElementById("suggestions");
+
+      input.addEventListener("input", async () => {
+        const query = input.value;
+
+        if (query.length < 2) {
+          suggestionsBox.innerHTML = "";
+          return;
+        }
+
+        const res = await fetch(`/listings/suggestions?q=${query}`);
+        const data = await res.json();
+
+        suggestionsBox.innerHTML = "";
+
+        data.forEach((item) => {
+          const div = document.createElement("div");
+          div.classList.add("suggestion-item");
+
+          div.innerText = `${item.title} - ${item.location}`;
+
+          div.onclick = () => {
+            input.value = item.title;
+            suggestionsBox.innerHTML = "";
+          };
+
+          suggestionsBox.appendChild(div);
+        });
+      });
+    </script>
   </body>
 </html>

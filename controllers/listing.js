@@ -3,8 +3,31 @@ const Listing = require("../models/listing.js");
 
 
 module.exports.index = async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("./listings/index.ejs", { allListings });
+    const { search } = req.query;
+    let page = parseInt(req.query.page) || 1;
+    let limit = 9;
+    let query = {};
+
+    if (search) {
+        query = {
+            $or: [
+                { title: { $regex: search, $options: 'i' } },
+                { location: { $regex: search, $options: 'i' } },
+                { country: { $regex: search, $options: 'i' } }
+            ]
+        };
+    }
+
+    const totalListings = await Listing.countDocuments(query);
+    const allListings = await Listing.find(query)
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+    res.render("listings/index.ejs", {
+        allListings,
+        currentPage: page,
+        totalPages: Math.ceil(totalListings / limit)
+    });
 };
 
 module.exports.newListingForm = (req, res) => {

@@ -7,6 +7,7 @@ const validateListing = require("../middleware.js").validateListing;
 const listingController = require("../controllers/listing.js");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
+const Listing = require("../models/listing");
 const upload = multer({ storage });
 router
     .route("/")
@@ -23,6 +24,39 @@ router
 
 //new route
 router.get("/new", isLoggedIn, wrapAsync(listingController.newListingForm));
+
+router.get("/suggestions", async (req, res) => {
+    const { q } = req.query;
+
+    if (!q) return res.json([]);
+
+    const results = await Listing.find({
+        $or: [
+            { title: { $regex: q, $options: "i" } },
+            { location: { $regex: q, $options: "i" } },
+            { country: { $regex: q, $options: "i" } }
+        ]
+    }).limit(5);
+
+    res.json(results);
+});
+
+router.get("/search", async (req, res) => {
+    
+    const { q } = req.query;
+    console.log(q);
+
+    const results = await Listing.find({
+        $or: [
+            { title: { $regex: q, $options: "i" } },
+            { location: { $regex: q, $options: "i" } },
+            { country: { $regex: q, $options: "i" } }
+        ]
+    });
+
+    res.render("listings/index.ejs", { allListings: results });
+});
+
 
 
 router

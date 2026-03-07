@@ -110,6 +110,30 @@
     </a>
     <% } %>
   </div>
+  <div class="pagination-container">
+
+    <% if(currentPage > 1){ %>
+        <a href="/listings?page=<%= currentPage - 1 %>" class="page-btn nav-btn">«</a>
+    <% } %>
+
+    <% for(let i = 1; i <= totalPages; i++){ %>
+
+        <a href="/listings?page=<%= i %>" 
+           class="page-btn <%= currentPage === i ? 'active-page' : '' %>">
+           <%= i %>
+        </a>
+
+    <% } %>
+
+    <% if(currentPage < totalPages){ %>
+        <a href="/listings?page=<%= currentPage + 1 %>" class="page-btn nav-btn">»</a>
+    <% } %>
+
+</div>
+<br>
+<br>
+<br>
+
 </body>
 
 <script>

@@ -3,23 +3,85 @@
     background-color: #fe424d;
     color: #fff;
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    white-space: nowrap;
   }
-   .search-btn:hover{
-    background-color: #fe424d;
+  .search-btn:hover{
+    background-color: #d63840;
     color: #fff;
   }
   .search-btn i{
-    display: inline;
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
   }
   .search-input{
     border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid #ddd;
+    min-width: 200px;
+  }
+  .search-input:focus{
+    border-color: #fe424d;
+    box-shadow: 0 0 0 0.2rem rgba(254, 66, 77, 0.25);
+  }
+  .suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    margin-top: 0.5rem;
+  }
+  .suggestions-box.show {
+    display: block;
+  }
+  .suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+  }
+  .suggestion-item:hover {
+    background-color: #f8f9fa;
+  }
+  .suggestion-item:last-child {
+    border-bottom: none;
+  }
+  
+  @media (max-width: 768px) {
+    .search-input {
+      min-width: 150px;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+    .search-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+    .search-btn span {
+      display: none;
+    }
+    .navbar-nav.position-relative {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+    .navbar-nav.position-relative form {
+      width: 100%;
+    }
+    .search-input {
+      flex: 1;
+    }
   }
 </style>
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand fa-location" href="/listings"><i class="fa-solid fa-location-crosshairs"></i>WanderLust</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,19 +91,30 @@
       <div class="navbar-nav">
         <a class="nav-link" href="/listings">Explore</a>
       </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search" onsubmit="return false;">
-          <input class="form-control me-2 search-input" type="search" name="q" placeholder="Search Destinations" aria-label="Search"/>
-          <button class="btn search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-        </form>
-      </div>
+     <div class="navbar-nav ms-auto position-relative">
+  <form class="d-flex" role="search" action="/listings" method="GET">
+    <input class="form-control me-2 search-input" 
+           id="search-input"
+           type="search"
+           name="search"
+           placeholder="Search Destinations"
+           autocomplete="off"
+           aria-label="Search"/>
+           
+    <button class="btn search-btn" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i><span> Search</span>
+    </button>
+  </form>
+
+  <div id="suggestions" class="suggestions-box"></div>
+</div>
       <div class="navbar-nav ms-auto">
          <a class="nav-link" href="/listings/new">WanderLust your home</a>
-        <% if(!currentUser) {%>
+        <% if(typeof currentUser === 'undefined' || !currentUser) {%>
         <a class="nav-link"href="/signup"><b>Sign up</b></a>
         <a class="nav-link" href="/login"><b>Log in</b></a>
         <% } %>
-        <% if(currentUser) {%>
+        <% if(typeof currentUser !== 'undefined' && currentUser) {%>
         <a class="nav-link" href="/logout"><b>Log out</b></a>
         <% } %>
       </div>
